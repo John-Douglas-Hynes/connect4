@@ -124,7 +124,7 @@ connect4.addEventListener("mousemove", (e) => {
     };
 });
 
-connect4.addEventListener("mousedown", (e) => {
+function gameMove(e) {
     currentPosition=Math.floor((e.offsetX + 37.5)/75)-1;
     if (currentPosition < 8 && currentPosition >= 0) {
         let h=0
@@ -142,18 +142,35 @@ connect4.addEventListener("mousedown", (e) => {
             ctx.beginPath();
             ctx.arc((currentPosition+1)*75, h*75 + 125, 30, 0, Math.PI*2);
             ctx.fill();
-            if (getResult(board) !== null) {
-                alert("game over!");
-                initiate();
+            if (getResult(board) === 1) {
+                ctx.fillStyle="black";
+                ctx.font = "60pt Calibri";
+                ctx.fillText("You Win!", 150, 200);
+                connect4.removeEventListener("click", gameMove);
             };
             randomMove(board);
-            if (getResult(board) !== null) {
-                alert("game over!");
-                initiate();
+            ctx.fillStyle = "yellow"
+            ctx.beginPath();
+            ctx.arc((currentPosition+1)*75, 50, 32, 0, Math.PI*2);
+            ctx.fill();
+            if (getResult(board) === -1) {
+                ctx.fillStyle="black";
+                ctx.font = "60pt Calibri";
+                ctx.fillText("You Lose!", 150, 200);
+                connect4.removeEventListener("click", gameMove);
+            };
+            if (getResult(board) === 0) {
+                ctx.fillStyle="black";
+                ctx.font = "60pt Calibri";
+                ctx.fillText("Draw!", 150, 200);
+                connect4.removeEventListener("click", gameMove);
             };
         };
     };
-});
+};
+
+
+connect4.addEventListener("click", gameMove)
 
 function main() {
     initiate();
